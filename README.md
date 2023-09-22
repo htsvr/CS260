@@ -8,7 +8,7 @@ What about how often your friend boils water?
 
 What about a total strangers water boiling habits?
 
-Well, wonder no more with this new website: [**startboiling.click**](startboiling.click)
+Well, wonder no more with this new website: [**startboiling.click**](http://startboiling.click)
 
 This website allows you to track your boiling and see who else is boiling water at the same time. You can also rack up boiling time to become one of the **Top Water Boilers**, or just look at the list and be in awe of them.
 
