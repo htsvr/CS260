@@ -26,3 +26,12 @@ This website allows you to track your boiling and see who else is boiling water 
 **Authentication** - Users can create an account or login, once logged in their username will be displayed at the top of the page  
 **Database Data** - Rendering the time spent boiling water for all users, which will be stored in the database.  
 **WebSocket data** - Rendering the users currently boiling water in realtime.
+
+## HTML
+- **HTML pages** - Three HTML Pages that represent the ablilty to login, view data, and record previous boiling sessions.
+- **Links** - The log in page links to the main data page, which then has a log out button to link back to the log in page.  There is also a "Record Previous Data" button that links to the page to record prevous boiling sessions.
+- **Text** - There are text headers as well as data represented by text.
+- **Images** - There is an image of boiling water in the footer.
+- **Login** - Input box and submit button for username login.
+- **Database** - The Top Boilers stats represents data pulled from the database.
+- **WebSocket** - People currently boiling water stats represents data pulled from websocket data.
