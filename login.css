@@ -40,7 +40,7 @@ input {
 }
 
 header {
-  flex: 0 5em;
+  flex: 0 0 5em;
   display: flex;
   flex-direction: row;
   justify-content: right;
@@ -49,6 +49,8 @@ header {
   background-color: #3bb68d;
   padding-right: 1em;
   padding-left: 1em;
+  padding-top: .5em;
+  padding-bottom: .5em;
 }
 
 footer {
@@ -59,11 +61,19 @@ footer {
   align-items: center;
   padding-right: 1em;
   padding-left: 1em;
+  padding-top: .5em;
+  padding-bottom: .5em;
 }
 
 h1 {
   margin-right: auto;
   font-family: Georgia, 'Times New Roman', Times, serif;
+  font-size: 30px;
+}
+
+h2 {
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-size: 20px;
 }
 
 button {
@@ -88,5 +98,15 @@ button:hover {
   #button-col {
     grid-column: 2/3;
     grid-row: 1/2;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  h1 {
+    font-size: 20px;
+  }
+  
+  h2 {
+    font-size: 15px;
   }
 }
