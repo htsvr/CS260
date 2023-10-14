@@ -3,6 +3,12 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
+            crossorigin="anonymous"
+        />
         <title>Start Boiling</title>
         <link rel="icon" href="assets/favicon.ico" />
     </head>
@@ -13,12 +19,16 @@
             <hr />
         </header>
 
-        <main>
+        <main class="m-3">
             <h3>Login to start</h3>
             <form method="get" action="track.html">
-                <label for="username">Username</label>
-                <input type = "text" id="username" placeholder="username" />
-                <button type="submit">Login</button>
+                <div class="form-group row">
+                    <label for="username" class="col-sm-2">Username</label>
+                    <div class="col-sm-2">
+                        <input type = "text" class="form-control" id="username" placeholder="username" />
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Login</button>
             </form>
         </main>
     </body>

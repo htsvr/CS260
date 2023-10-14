@@ -1,0 +1,29 @@
+main {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-gap: 1em;
+  place-items: center;
+  grid-auto-flow: row;
+}
+* {
+  /*background: #AAAAAA;*/
+  border-style: solid;
+}
+.main-col {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  row-gap:2em;
+  justify-content: flex-start;
+  /*background: #AAAA00; */
+}
+
+.grid-piece {
+  background: #AA0000;
+}
+
+.graph {
+  width: 100%;
+  width: 100%;
+  object-fit: contain;
+}
