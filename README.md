@@ -35,3 +35,10 @@ This website allows you to track your boiling and see who else is boiling water 
 - **Login** - Input box and submit button for username login.
 - **Database** - The Top Boilers stats represents data pulled from the database.
 - **WebSocket** - People currently boiling water stats represents data pulled from websocket data.
+
+## CSS
+- **Header, footer, and main content body** - flex display to structure header, footer, and main with a grid in main for track.html.
+- **Navigation elements** - buttons to take you between pages are formateed with css to have borders and orunded corners and change color when hovered over.
+- **Responsive to window resizing** - flex and grid displays allow the website content to repond to screen size and organize itself appropriately.
+- **Application elements** - track buttons as well as placeholder graphs properly formatted look nicer and be better positioned.
+- **Application images** - profile picture icon added next to username.
