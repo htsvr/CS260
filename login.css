@@ -6,12 +6,19 @@ main {
   flex: 1;
   margin-top: 1em;
   margin-bottom: 1em;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  grid-gap: 1em;
-  align-items: top;
-  justify-content: center;
-  grid-auto-flow: row;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: top;
+  gap: 1em;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: top;
+  gap: 1em;
 }
 
 body {
@@ -24,6 +31,12 @@ body {
 
 html {
   height: 100%;
+}
+
+input {
+  border: 3px solid black;
+  padding: .5em;
+  border-radius: 4px;
 }
 
 header {
@@ -69,32 +82,6 @@ button:hover {
 
 .svg {
   height: 2em;
-}
-
-.main-col {
-  display: flex;
-  flex-direction: column;
-  row-gap:2em;
-  justify-content: flex-start;
-  /*background: #AAAA00; */
-}
-
-.grid-piece {
-  display: flex;
-  flex-direction: column;
-  place-items: center;
-}
-
-.personalStats {
-  display: flex;
-  flex-direction: column;
-  place-items: center;
-}
-
-.graph {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
 }
 
 @media screen and (min-width: 680px){

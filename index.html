@@ -3,39 +3,30 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link
-            href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
-            rel="stylesheet"
-            integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
-            crossorigin="anonymous"
-        />
+        <link rel="stylesheet" href="login.css" />
         <title>Start Boiling</title>
         <link rel="icon" href="assets/favicon.ico" />
     </head>
     <body>
         <header>
             <h1>Start Boiling</h1>
-            <h2>Username</h2>
-            <hr />
+            <img class = svg src = "assets/images/profile.svg" alt="profile image" />
+            <h2><span class="username">Username</span></h2>
+            <a href = "index.html">
+                <button>Log out</button>
+            </a>
         </header>
 
         <main class="m-3">
             <h3>Login to start</h3>
-            <form method="get" action="track.html">
-                <div class="form-group row">
-                    <label for="username" class="col-sm-2">Username</label>
-                    <div class="col-sm-2">
-                        <input type = "text" class="form-control" id="username" placeholder="username" />
-                    </div>
-                </div>
-                <button type="submit" class="btn btn-primary">Login</button>
-            </form>
+            <label for="username">Username</label>
+            <input type = "text" id="username" placeholder="username" />
+            <a href = "track.html">
+                <button type="submit">Login</button>
+            </a>
         </main>
     </body>
     <footer>
-        <hr />
-        <img src="https://images.squarespace-cdn.com/content/v1/5e22525eee2964277bfe2f3e/1588521416152-IGONV1SZQFA1HL4VT3AU/boil.png" />
-        <br/>
         <a href="https://github.com/htsvr/StartBoiling">Github Page</a>
     </footer>
 </html>
