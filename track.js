@@ -25,6 +25,9 @@ function startSession(){
     localStorage.setItem("sessions", JSON.stringify(sessions));
     localStorage.setItem("isBoiling", true);
     updateButton();
+    const newItem = document.createElement("li");
+    newItem.appendChild(document.createTextNode(localStorage.getItem("username")));
+    document.querySelector("#currentBoilers").appendChild(newItem);
 }
 
 function endSession(){
@@ -38,6 +41,12 @@ function endSession(){
     localStorage.setItem("sessions", JSON.stringify(sessions));
     localStorage.setItem("isBoiling", false);
     updateButton();
+    const currentBoilers = document.querySelector("#currentBoilers");
+    for (const child of currentBoilers.children) {
+        if (child.textContent == localStorage.getItem("username")){
+            currentBoilers.removeChild(child);
+        }
+    }
 }
 
 function updateButton(){
