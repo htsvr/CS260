@@ -53,6 +53,7 @@ function updateButton(){
 function update_sessions(){
         let personalTime = 0;
         let totalTime = 0;
+        document.querySelector("#currentBoilingTime").textContent = getFormatedTime(0);
         sessions = JSON.parse(localStorage.getItem("sessions"));
         sessions.forEach((session) => {
             if (!session.ended){
@@ -90,10 +91,10 @@ function getFormatedTime(ms){
     return formatted;
 }
 
+localStorage.setItem("sessions", JSON.stringify([]));
 updateUsername();
 updateButton();
 update_sessions();
-localStorage.setItem("sessions", JSON.stringify([]));
 setInterval(() => {
     if(localStorage.getItem("isBoiling") == "true"){
         document.querySelector("#currentBoilingTime").textContent = getFormatedTime(+localStorage.getItem("currentBoilingTime")+Date.now());
