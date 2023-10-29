@@ -42,3 +42,9 @@ This website allows you to track your boiling and see who else is boiling water 
 - **Responsive to window resizing** - flex and grid displays allow the website content to repond to screen size and organize itself appropriately.
 - **Application elements** - track buttons as well as placeholder graphs properly formatted look nicer and be better positioned.
 - **Application images** - profile picture icon added next to username.
+
+## JavaScript
+- **JavaScript support for future login** - stores the username in local storage and displays it at the top of each page.
+- **JavaScript support for future database data** - Personal and Website Boiling times stored in local storage.
+- **JavaScript support for future WebSocket** - Stores boiling sessions as objects in local storage. This will eventally by modified to reference WebSocket as well.
+- **JavaScript support for your application's interaction logic** - Added JavaScript to record previous boil input to accept only durations.  Used JavaScript to switch the Start Boiling button to "Stop Boiling" when clicked, and generate a session object in local storage.
