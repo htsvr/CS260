@@ -8,6 +8,9 @@
         <link rel="icon" href="favicon.ico" />
     </head>
     <body>
+        <script type="module">
+            import id from 'https://cdn.jsdelivr.net/npm/input-duration/+esm'
+        </script>
         <header>
             <h1>Start Boiling</h1>
             <img class = svg src = "assets/images/profile.svg" alt="profile image" />
@@ -17,15 +20,15 @@
             </a>
         </header>
         <main>
-            <form method="get" action="track.html">
+            <div>
                 <label for="time">Time Spent Boiling</label>
-                <input type="time" id="time" placeholder="00:00" />
-                <button type="submit">Record</button>
-            </form>
+                <input-duration id="bob"></input-duration>
+                <button onclick = "record()">Record</button>
+            </div>
         </main>
         <footer>
             <a href="https://github.com/htsvr/StartBoiling">Github Page</a>
         </footer>
-        <script src = "track.js"></script>
+        <script src = "record.js"></script>
     </body>
 </html>

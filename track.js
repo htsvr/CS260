@@ -17,7 +17,10 @@ function boilingButtonPressed(){
 
 function startSession(){
     let sessions = JSON.parse(localStorage.getItem("sessions"));
-    newSession = {user: localStorage.getItem("username"), timeStarted: Date.now(), timeElapsed: 0, ended: false};
+    const newSession = {user: localStorage.getItem("username"), timeStarted: Date.now(), timeElapsed: 0, ended: false};
+    if (sessions == undefined){
+        sessions = [];
+    }
     sessions.push(newSession);
     localStorage.setItem("sessions", JSON.stringify(sessions));
     localStorage.setItem("isBoiling", true);
@@ -48,6 +51,7 @@ function updateButton(){
         document.querySelector("#startboiling").style.background = "white";
     }
     update_sessions()
+    loadPlots();
 }
 
 function update_sessions(){
@@ -91,10 +95,65 @@ function getFormatedTime(ms){
     return formatted;
 }
 
-localStorage.setItem("sessions", JSON.stringify([]));
+function loadPlots() {
+    let chartStatus = Chart.getChart("barchart");
+    if (chartStatus != undefined) {
+        chartStatus.destroy();
+    }
+    const ctx = document.getElementById('barchart');
+    const sessions = JSON.parse(localStorage.getItem("sessions"));
+    let data = [0, 0, 0, 0, 0, 0, 0]
+    sessions.forEach((session) => {
+        data[(new Date(session.timeStarted)).getDay] += session.timeElapsed;
+    });
+    for(let i = 0; i < data.length; i++){
+        data[i] = data[i] / (60*1000);
+    }
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+        labels: ['Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun'],
+        datasets: [{
+            label: 'Minutes Spent Boiling',
+            data: data,
+            borderWidth: 1
+        }]
+        },
+        options: {
+        scales: {
+            y: {
+            beginAtZero: true
+            }
+        }
+        }
+    });
+    chartStatus = Chart.getChart("scatterplot");
+    if (chartStatus != undefined) {
+        chartStatus.destroy();
+    }
+    const stx = document.getElementById('scatterplot');
+    data = []
+    sessions.forEach((session) => {
+        data.push({x: session.timeStarted, y: session.timeElapsed});
+    });
+    new Chart(stx, {
+        type: 'scatter',
+        data: data,
+        options: {
+        scales: {
+            x: {
+            type: 'linear',
+            position: 'bottom'
+            }
+        }
+        }
+    });
+}
+
 updateUsername();
 updateButton();
 update_sessions();
+loadPlots();
 setInterval(() => {
     if(localStorage.getItem("isBoiling") == "true"){
         document.querySelector("#currentBoilingTime").textContent = getFormatedTime(+localStorage.getItem("currentBoilingTime")+Date.now());
@@ -102,3 +161,4 @@ setInterval(() => {
         document.querySelector("#totalWebsiteBoilingTime").textContent = getFormatedTime(+localStorage.getItem("totalWebsiteBoilingTime")+Date.now());
     }
     }, 1000 );
+
