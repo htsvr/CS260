@@ -12,7 +12,7 @@
         <header>
             <h1>Start Boiling</h1>
             <img class = svg src = "assets/images/profile.svg" alt="profile image" />
-            <h2>Username</h2>
+            <h2 id = "username">Username</h2>
             <a href = "index.html">
                 <button>Log out</button>
             </a>
@@ -20,7 +20,7 @@
         <main>
             <div class = main-col id="button-col">
                 <div class = grid-piece>
-                    <button id="startboiling">Start Boiling</button>
+                    <button id="startboiling" onclick = "boilingButtonPressed()">Start Boiling</button>
                     <br/>
                     <br/>
                     <a href = "record.html">
@@ -30,15 +30,15 @@
                 <div class = grid-piece>
                     <div class="personalStats">
                         <h3>Current Boiling Time</h3>
-                        <span>2:13</span>
+                        <span id = "currentBoilingTime"></span>
                     </div>
                     <div class="personalStats">
                         <h3>Total Personal Boiling Time</h3>
-                        <span>47:32</span>
+                        <span id = "totalPersonalBoilingTime"></span>
                     </div>
                     <div class="personalStats">
                         <h3>Total Website Boiling Time</h3>
-                        <span>1:34:21</span>
+                        <span id = "totalWebsiteBoilingTime"></span>
                     </div>
                 </div>
             </div>
@@ -69,8 +69,9 @@
                 </div>
             </div>
         </main>
+        <footer>
+            <a href="https://github.com/htsvr/StartBoiling">Github Page</a>
+        </footer>
+        <script src = "track.js"></script>
     </body>
-    <footer>
-        <a href="https://github.com/htsvr/StartBoiling">Github Page</a>
-    </footer>
 </html>

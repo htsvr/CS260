@@ -11,19 +11,20 @@
         <header>
             <h1>Start Boiling</h1>
             <img class = svg src = "assets/images/profile.svg" alt="profile image" />
-            <h2>Username</h2>
+            <h2 id = "username">Username</h2>
         </header>
 
         <main class="m-3">
             <h3>Login to start</h3>
-            <label for="username">Username</label>
-            <form method="get" action="track.html">
-                <input type="text" id="username" placeholder="username" />
-                <button type="submit">Login</button>
-            </form>
+            <label for="usernameInput">Username</label>
+            <div>
+                <input type="text" id="usernameInput" placeholder="username" />
+                <button onclick="login()">Login</button>
+            </div>
         </main>
+        <footer>
+            <a href="https://github.com/htsvr/StartBoiling">Github Page</a>
+        </footer>
+        <script src="login.js"></script>
     </body>
-    <footer>
-        <a href="https://github.com/htsvr/StartBoiling">Github Page</a>
-    </footer>
 </html>
