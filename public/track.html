@@ -13,9 +13,7 @@
             <h1>Start Boiling</h1>
             <img class = svg src = "assets/images/profile.svg" alt="profile image" />
             <h2 id = "username">Username</h2>
-            <a href = "index.html">
-                <button>Log out</button>
-            </a>
+            <button onclick = "logout()">Log out</button>
         </header>
         <main>
             <div class = main-col id="button-col">
@@ -46,17 +44,11 @@
                 <div class = grid-piece>
                     <h3>People Currently Boiling Water</h3>
                     <ul id = "currentBoilers">
-                        <li class="boilingtimes">Emma Van Tassell</li>
-                        <li class="boilingtimes">Slothman</li>
-                        <li class="boilingtimes">Username</li>
                     </ul>
                 </div>
                 <div class = grid-piece>
                     <h3>Top Water Boilers</h3>
-                    <ul>
-                        <li class="boilingtimes">Emma Van Tassell - 36:14:52</li>
-                        <li class="boilingtimes">Username - 7:32</li>
-                        <li class="boilingtimes">Slothman - 8:21</li>
+                    <ul id = "topBoilers">
                     </ul>
                 </div>
             </div>

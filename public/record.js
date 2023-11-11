@@ -6,6 +6,11 @@ function updateUsername() {
     }
 }
 
+function logout() {
+    localStorage.removeItem("username");
+    window.location.href = "index.html";
+}
+
 function record() {
     const bob = document.querySelector("#bob").value;
     const ms = ((((+bob.substring(0, 2))*60+(+bob.substring(3, 5)))*60+(+bob.substring(6, 8)))*1000+(+bob.substring(9, 12)));

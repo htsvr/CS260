@@ -6,6 +6,11 @@ function updateUsername() {
     }
 }
 
+function logout() {
+    localStorage.removeItem("username");
+    window.location.href = "index.html";
+}
+
 function boilingButtonPressed(){
     if(localStorage.getItem("isBoiling") == "true") {
         endSession();
@@ -85,9 +90,7 @@ function update_sessions(){
         localStorage.setItem("totalPersonalBoilingTime", personalTime-Date.now())
         document.querySelector("#totalPersonalBoilingTime").textContent = getFormatedTime(personalTime);
         localStorage.setItem("totalWebsiteBoilingTime", totalTime-Date.now())
-        document.querySelector("#totalWebsiteBoilingTime").textContent = getFormatedTime(personalTime);
-        ref = Date.now();
-        resolve = 1;
+        document.querySelector("#totalWebsiteBoilingTime").textContent = getFormatedTime(totalTime);
 }
 
 function getFormatedTime(ms){
@@ -112,8 +115,10 @@ function loadPlots() {
     const ctx = document.getElementById('barchart');
     const sessions = JSON.parse(localStorage.getItem("sessions"));
     let data = [0, 0, 0, 0, 0, 0, 0]
+    let day = 0;
     sessions.forEach((session) => {
-        data[(new Date(session.timeStarted)).getDay] += session.timeElapsed;
+        day = (new Date(session.timeStarted)).getDay();
+        data[day] += session.timeElapsed;
     });
     for(let i = 0; i < data.length; i++){
         data[i] = data[i] / (60*1000);
@@ -121,7 +126,7 @@ function loadPlots() {
     new Chart(ctx, {
         type: 'bar',
         data: {
-        labels: ['Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun'],
+        labels: ['Sun', 'Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat'],
         datasets: [{
             label: 'Minutes Spent Boiling',
             data: data,
@@ -143,11 +148,19 @@ function loadPlots() {
     const stx = document.getElementById('scatterplot');
     data = []
     sessions.forEach((session) => {
-        data.push({x: session.timeStarted, y: session.timeElapsed});
+        data.push({x: (session.timeStarted-Date.now())/60000, y: session.timeElapsed/60000});
     });
+    let dataset = {
+        datasets: [
+            {
+                label: 'Minutes Boiled',
+                data: data
+            }
+        ]
+    }
     new Chart(stx, {
         type: 'scatter',
-        data: data,
+        data: dataset,
         options: {
         scales: {
             x: {
@@ -157,6 +170,54 @@ function loadPlots() {
         }
         }
     });
+}
+
+function addTime(user, time, obj) {
+    if(obj[user]){
+        obj[user] += time;
+    } else {
+        obj[user] = time;
+    }
+}
+
+function updateBoilers() {
+    let CurrentBoilers = {};
+    let TopBoilers = {};
+    const sessions = JSON.parse(localStorage.getItem("sessions"));
+    sessions.forEach((session) => {
+        addTime(session.user, session.timeElapsed, TopBoilers);
+        if (!session.ended) {
+            addTime(session.user, Date.now() - session.timeStarted, TopBoilers);
+            addTime(session.user, Date.now() - session.timeStarted, CurrentBoilers);
+        }
+    });
+    BoilerStats("#topBoilers", TopBoilers);
+    BoilerStats("#currentBoilers", CurrentBoilers);
+}
+
+function BoilerStats(listId, obj) {
+    let BoilersArray = [];
+    for (const user in obj) {
+        BoilersArray.push({user: user, time: obj[user]});
+    }
+    BoilersArray.sort((a,b) => (a.time > b.time) ? -1 : ((b.time > a.time) ? 1 : 0))
+    const topEl = document.querySelector(listId);
+    deleteChildren(topEl);
+    
+    let newItem = document.createElement("li");
+    BoilersArray.forEach((obj) => {
+        newItem = document.createElement("li");
+        newItem.appendChild(document.createTextNode(obj.user + ' - ' + getFormatedTime(obj.time)));
+        topEl.appendChild(newItem);
+    })
+}
+
+function deleteChildren(elem) {
+    var child = elem.lastElementChild;  
+    while (child) { 
+        elem.removeChild(child); 
+        child = elem.lastElementChild; 
+    } 
 }
 
 updateUsername();
@@ -169,5 +230,6 @@ setInterval(() => {
         document.querySelector("#totalPersonalBoilingTime").textContent = getFormatedTime(+localStorage.getItem("totalPersonalBoilingTime")+Date.now());
         document.querySelector("#totalWebsiteBoilingTime").textContent = getFormatedTime(+localStorage.getItem("totalWebsiteBoilingTime")+Date.now());
     }
+    updateBoilers();
     }, 1000 );
 
