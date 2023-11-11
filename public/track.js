@@ -1,3 +1,80 @@
+async function GlobLoadSessions() {
+    let sessions = [];
+    try {
+      // Get the latest high scores from the service
+      const response = await fetch('/api/sessions');
+      sessions = await response.json();
+  
+      // Save the scores in case we go offline in the future
+      localStorage.setItem('sessions', JSON.stringify(sessions));
+    } catch {
+      // If there was an error then just use the last saved scores
+      const sessionsText = localStorage.getItem('sessions');
+      if (sessionsText) {
+        sessions = JSON.parse(sessionsText);
+      }
+    }
+  }
+
+  async function GlobSaveSession(session) {
+    try {
+      const response = await fetch('/api/sessions/start', {
+        method: 'POST',
+        headers: {'content-type': 'application/json'},
+        body: JSON.stringify(session),
+      });
+
+      // Store what the service gave us as the high scores
+      const sessions = await response.json();
+      localStorage.setItem('sessions', JSON.stringify(sessions));
+    } catch {
+      // If there was an error then just track scores locally
+      this.updateSessionsLocal(session);
+    }
+  }
+
+  async function GlobEndSession() {
+    try {
+      const response = await fetch('/api/sessions/end', {
+        method: 'POST',
+        headers: {'content-type': 'application/json'},
+        body: JSON.stringify({"username": localStorage.getItem("username")}),
+      });
+
+      // Store what the service gave us as the high scores
+      const sessions = await response.json();
+      localStorage.setItem('sessions', JSON.stringify(sessions));
+    } catch {
+      // If there was an error then just track scores locally
+      this.endSessionsLocal();
+    }
+  }
+
+  function updateSessionsLocal(newScore) {
+    let sessions = [];
+    const sessionsText = localStorage.getItem('sessions');
+    if (sessionsText) {
+      sessions = JSON.parse(sessionsText);
+    }
+    sessions.push(newScore);
+    localStorage.setItem('sessions', JSON.stringify(sessions));
+  }
+
+  function endSessionsLocal() {
+    let sessions = [];
+    const sessionsText = localStorage.getItem('sessions');
+    if (sessionsText) {
+      sessions = JSON.parse(sessionsText);
+    }
+    sessions.forEach((session) => {
+        if (session.user == localStorage.getItem("username") && !session.ended){
+            session.timeElapsed = Date.now() - session.timeStarted;
+            session.ended = true;
+        }
+    });
+    localStorage.setItem("sessions", JSON.stringify(sessions));
+  }
+
 function updateUsername() {
     const nameEl = document.querySelector("#username");
     const username = localStorage.getItem("username");
@@ -21,13 +98,13 @@ function boilingButtonPressed(){
 }
 
 function startSession(){
-    let sessions = JSON.parse(localStorage.getItem("sessions"));
     const newSession = {user: localStorage.getItem("username"), timeStarted: Date.now(), timeElapsed: 0, ended: false};
-    if (sessions == undefined){
-        sessions = [];
-    }
-    sessions.push(newSession);
-    localStorage.setItem("sessions", JSON.stringify(sessions));
+    // if (sessions == undefined){
+    //     sessions = [];
+    // }
+    // sessions.push(newSession);
+    // localStorage.setItem("sessions", JSON.stringify(sessions));
+    GlobSaveSession(newSession);
     localStorage.setItem("isBoiling", true);
     updateButton();
     const newItem = document.createElement("li");
@@ -36,14 +113,7 @@ function startSession(){
 }
 
 function endSession(){
-    let sessions = JSON.parse(localStorage.getItem("sessions"));
-    sessions.forEach((session) => {
-        if (session.user == localStorage.getItem("username") && !session.ended){
-            session.timeElapsed = Date.now() - session.timeStarted;
-            session.ended = true;
-        }
-    });
-    localStorage.setItem("sessions", JSON.stringify(sessions));
+    GlobEndSession();
     localStorage.setItem("isBoiling", false);
     updateButton();
     const currentBoilers = document.querySelector("#currentBoilers");
@@ -230,6 +300,10 @@ setInterval(() => {
         document.querySelector("#totalPersonalBoilingTime").textContent = getFormatedTime(+localStorage.getItem("totalPersonalBoilingTime")+Date.now());
         document.querySelector("#totalWebsiteBoilingTime").textContent = getFormatedTime(+localStorage.getItem("totalWebsiteBoilingTime")+Date.now());
     }
+    //GlobLoadSessions();
     updateBoilers();
     }, 1000 );
+    setInterval(() => {
+        GlobLoadSessions();
+        }, 10000 );
 
