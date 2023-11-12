@@ -48,3 +48,11 @@ This website allows you to track your boiling and see who else is boiling water 
 - **JavaScript support for future database data** - Personal and Website Boiling times stored in local storage.
 - **JavaScript support for future WebSocket** - Stores boiling sessions as objects in local storage. This will eventally by modified to reference WebSocket as well. Adds user to "People Currently Boiling Water", which will be further populated with websocket data.
 - **JavaScript support for your application's interaction logic** - Added JavaScript to record previous boil input to accept only durations.  Used JavaScript to switch the Start Boiling button to "Stop Boiling" when clicked, and generate a session object in local storage.
+
+
+## Service
+- **Create an HTTP service using Node.js and Express** - Done!
+- **Frontend served up using express static middleware** - Done!
+- **Your frontend calls third party service endpoints** - Random quote displays on the record page.
+- **Your backend provides service endpoints** - Implemented service endpoints to get and update boiling sessions.
+- **Your frontend calls your service endpoints** - Frontend calls service endponts to get updated boiling sessions and times.
