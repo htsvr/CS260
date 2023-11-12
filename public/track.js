@@ -38,7 +38,7 @@ async function GlobLoadSessions() {
       const response = await fetch('/api/sessions/end', {
         method: 'POST',
         headers: {'content-type': 'application/json'},
-        body: JSON.stringify({"username": localStorage.getItem("username"), "time": Date.now()}),
+        body: JSON.stringify({"username": sessionStorage.getItem("username"), "time": Date.now()}),
       });
 
       // Store what the service gave us as the high scores
@@ -67,7 +67,7 @@ async function GlobLoadSessions() {
       sessions = JSON.parse(sessionsText);
     }
     sessions.forEach((session) => {
-        if (session.user == localStorage.getItem("username") && !session.ended){
+        if (session.user == sessionStorage.getItem("username") && !session.ended){
             session.timeElapsed = Date.now() - session.timeStarted;
             session.ended = true;
         }
@@ -75,21 +75,24 @@ async function GlobLoadSessions() {
     localStorage.setItem("sessions", JSON.stringify(sessions));
   }
 
-function updateUsername() {
+  function updateUsername() {
     const nameEl = document.querySelector("#username");
-    const username = localStorage.getItem("username");
-    if (username) {
+    const username = sessionStorage.getItem("username");
+    if (username == undefined) {
+        username = localStorage.getItem("username");
+        sessionStorage.setItem("username", username);
+    } if(username){
         nameEl.textContent = username;
     }
 }
 
 function logout() {
-    localStorage.removeItem("username");
+    sessionStorage.removeItem("username");
     window.location.href = "index.html";
 }
 
 function boilingButtonPressed(){
-    if(localStorage.getItem("isBoiling") == "true") {
+    if(sessionStorage.getItem("isBoiling") == "true") {
         endSession();
     }
     else{
@@ -98,35 +101,34 @@ function boilingButtonPressed(){
 }
 
 function startSession(){
-    const newSession = {user: localStorage.getItem("username"), timeStarted: Date.now(), timeElapsed: 0, ended: false};
+    const newSession = {user: sessionStorage.getItem("username"), timeStarted: Date.now(), timeElapsed: 0, ended: false};
     // if (sessions == undefined){
     //     sessions = [];
     // }
     // sessions.push(newSession);
     // localStorage.setItem("sessions", JSON.stringify(sessions));
     GlobSaveSession(newSession);
-    localStorage.setItem("currentBoilingTime", -1*newSession.timeStarted);
-    localStorage.setItem("isBoiling", true);
+    sessionStorage.setItem("isBoiling", true);
     updateButton();
     const newItem = document.createElement("li");
-    newItem.appendChild(document.createTextNode(localStorage.getItem("username") + " - 00:00:00"));
+    newItem.appendChild(document.createTextNode(sessionStorage.getItem("username") + " - 00:00:00"));
     document.querySelector("#currentBoilers").appendChild(newItem);
 }
 
 function endSession(){
     GlobEndSession();
-    localStorage.setItem("isBoiling", false);
+    sessionStorage.setItem("isBoiling", false);
     updateButton();
     const currentBoilers = document.querySelector("#currentBoilers");
     for (const child of currentBoilers.children) {
-        if (child.textContent == localStorage.getItem("username")){
+        if (child.textContent == sessionStorage.getItem("username")){
             currentBoilers.removeChild(child);
         }
     }
 }
 
 function updateButton(){
-    const boiling = localStorage.getItem("isBoiling")
+    const boiling = sessionStorage.getItem("isBoiling")
     if(boiling == "true") {
         document.querySelector("#startboiling").textContent = "Stop Boiling";
         document.querySelector("#startboiling").style.background = "gray";
@@ -150,20 +152,16 @@ function update_sessions(){
         for (session of sessions) {
             if (!session.ended){
                 session.timeElapsed = Date.now() - session.timeStarted;
-                if(session.user == localStorage.getItem("username") && localStorage.getItem("isBoiling") === "true"){
-                    localStorage.setItem("currentBoilingTime", -1*session.timeStarted)
+                if(session.user == sessionStorage.getItem("username") && sessionStorage.getItem("isBoiling") === "true"){
                     document.querySelector("#currentBoilingTime").textContent = getFormatedTime(Date.now() - session.timeStarted);
                 }
             }
-            if(session.user == localStorage.getItem("username")){
+            if(session.user == sessionStorage.getItem("username")){
                 personalTime += session.timeElapsed;
             }
             totalTime += session.timeElapsed;
         };
-        
-        localStorage.setItem("totalPersonalBoilingTime", personalTime-Date.now())
         document.querySelector("#totalPersonalBoilingTime").textContent = getFormatedTime(personalTime);
-        localStorage.setItem("totalWebsiteBoilingTime", totalTime-Date.now())
         document.querySelector("#totalWebsiteBoilingTime").textContent = getFormatedTime(totalTime);
 }
 
@@ -303,11 +301,11 @@ function deleteChildren(elem) {
 
 function checkIfBoiling(){
     const sessions = JSON.parse(localStorage.getItem("sessions"));
-    localStorage.setItem("isBoiling", "false");
+    sessionStorage.setItem("isBoiling", "false");
     if (sessions !== undefined) {
         for (session of sessions) {
-            if (session.user=== localStorage.getItem("username") && session.ended == false) {
-                localStorage.setItem("isBoiling", "true");
+            if (session.user=== sessionStorage.getItem("username") && session.ended == false) {
+                sessionStorage.setItem("isBoiling", "true");
             }
         }
     }

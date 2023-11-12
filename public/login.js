@@ -1,6 +1,16 @@
 function login() {
     const nameEl = document.querySelector("#usernameInput");
-    localStorage.setItem("username", nameEl.value);
+    let username = nameEl.value;
+    if (username == ""){
+        if (localStorage.getItem("username") != undefined){
+            username = localStorage.getItem("username");
+        }
+        else {
+            username = "user";
+        }
+    }
+    localStorage.setItem("username", username);
+    sessionStorage.setItem("username", username);
     window.location.href = "track.html";
 }
 
