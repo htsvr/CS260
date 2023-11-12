@@ -41,4 +41,14 @@ function record() {
     window.location.href = "track.html";
 }
 
+function displayQuote(data) {
+    fetch('https://api.quotable.io/random')
+      .then((response) => response.json())
+      .then((data) => {
+        document.querySelector('#quote').textContent = data.content;
+        document.querySelector('#author').textContent = "- " + data.author;
+      });
+  }
+
 updateUsername();
+displayQuote();
