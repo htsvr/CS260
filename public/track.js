@@ -38,7 +38,7 @@ async function GlobLoadSessions() {
       const response = await fetch('/api/sessions/end', {
         method: 'POST',
         headers: {'content-type': 'application/json'},
-        body: JSON.stringify({"username": localStorage.getItem("username")}),
+        body: JSON.stringify({"username": localStorage.getItem("username"), "time": Date.now()}),
       });
 
       // Store what the service gave us as the high scores
@@ -105,10 +105,11 @@ function startSession(){
     // sessions.push(newSession);
     // localStorage.setItem("sessions", JSON.stringify(sessions));
     GlobSaveSession(newSession);
+    localStorage.setItem("currentBoilingTime", -1*newSession.timeStarted);
     localStorage.setItem("isBoiling", true);
     updateButton();
     const newItem = document.createElement("li");
-    newItem.appendChild(document.createTextNode(localStorage.getItem("username")));
+    newItem.appendChild(document.createTextNode(localStorage.getItem("username") + " - 00:00:00"));
     document.querySelector("#currentBoilers").appendChild(newItem);
 }
 
@@ -141,12 +142,15 @@ function updateButton(){
 function update_sessions(){
         let personalTime = 0;
         let totalTime = 0;
-        document.querySelector("#currentBoilingTime").textContent = getFormatedTime(0);
+        document.querySelector("#currentBoilingTime").textContent = "00:00:00";
         sessions = JSON.parse(localStorage.getItem("sessions"));
-        sessions.forEach((session) => {
+        if (sessions === undefined) {
+            sessions = [];
+        }
+        for (session of sessions) {
             if (!session.ended){
                 session.timeElapsed = Date.now() - session.timeStarted;
-                if(session.user == localStorage.getItem("username")){
+                if(session.user == localStorage.getItem("username") && localStorage.getItem("isBoiling") === "true"){
                     localStorage.setItem("currentBoilingTime", -1*session.timeStarted)
                     document.querySelector("#currentBoilingTime").textContent = getFormatedTime(Date.now() - session.timeStarted);
                 }
@@ -155,7 +159,7 @@ function update_sessions(){
                 personalTime += session.timeElapsed;
             }
             totalTime += session.timeElapsed;
-        });
+        };
         
         localStorage.setItem("totalPersonalBoilingTime", personalTime-Date.now())
         document.querySelector("#totalPersonalBoilingTime").textContent = getFormatedTime(personalTime);
@@ -178,6 +182,7 @@ function getFormatedTime(ms){
 }
 
 function loadPlots() {
+    //Chart.options.animation = false;
     let chartStatus = Chart.getChart("barchart");
     if (chartStatus != undefined) {
         chartStatus.destroy();
@@ -208,6 +213,9 @@ function loadPlots() {
             y: {
             beginAtZero: true
             }
+        },
+        animation: {
+            duration: 0
         }
         }
     });
@@ -237,6 +245,9 @@ function loadPlots() {
             type: 'linear',
             position: 'bottom'
             }
+        },
+        animation: {
+            duration: 0
         }
         }
     });
@@ -290,20 +301,32 @@ function deleteChildren(elem) {
     } 
 }
 
+function checkIfBoiling(){
+    const sessions = JSON.parse(localStorage.getItem("sessions"));
+    localStorage.setItem("isBoiling", "false");
+    if (sessions !== undefined) {
+        for (session of sessions) {
+            if (session.user=== localStorage.getItem("username") && session.ended == false) {
+                localStorage.setItem("isBoiling", "true");
+            }
+        }
+    }
+}
+
 updateUsername();
+GlobLoadSessions();
+checkIfBoiling();
 updateButton();
 update_sessions();
 loadPlots();
 setInterval(() => {
-    if(localStorage.getItem("isBoiling") == "true"){
-        document.querySelector("#currentBoilingTime").textContent = getFormatedTime(+localStorage.getItem("currentBoilingTime")+Date.now());
-        document.querySelector("#totalPersonalBoilingTime").textContent = getFormatedTime(+localStorage.getItem("totalPersonalBoilingTime")+Date.now());
-        document.querySelector("#totalWebsiteBoilingTime").textContent = getFormatedTime(+localStorage.getItem("totalWebsiteBoilingTime")+Date.now());
-    }
-    //GlobLoadSessions();
+    update_sessions();
+    GlobLoadSessions();
     updateBoilers();
+    loadPlots();
     }, 1000 );
-    setInterval(() => {
-        GlobLoadSessions();
-        }, 10000 );
+    // setInterval(() => {
+    //     GlobLoadSessions();
+    //     //update_sessions();
+    //     }, 10000 );
 

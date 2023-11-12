@@ -26,7 +26,7 @@ apiRouter.post('/sessions/start', (req, res) => {
 });
 
 apiRouter.post('/sessions/end', (req, res) => {
-    endSession(req.body.username, sessions);
+    endSession(req.body.username, req.body.time, sessions);
     res.send(sessions);
   });
 
@@ -44,10 +44,10 @@ function addSession(session, sessions) {
     sessions.push(session);
 }
 
-function endSession(username, sessions) {
+function endSession(username, endTime, sessions) {
     sessions.forEach((session) => {
         if (session.user == username && !session.ended){
-            session.timeElapsed = Date.now() - session.timeStarted;
+            session.timeElapsed = endTime - session.timeStarted;
             session.ended = true;
         }
     });
