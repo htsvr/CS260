@@ -8,9 +8,6 @@
         <link rel="icon" href="favicon.ico" />
     </head>
     <body>
-        <script type="module">
-            import id from 'https://cdn.jsdelivr.net/npm/input-duration/+esm'
-        </script>
         <header>
             <h1>Start Boiling</h1>
             <img class = svg src = "assets/images/profile.svg" alt="profile image" />
@@ -19,8 +16,15 @@
         </header>
         <main>
             <div>
-                <label for="time">Time Spent Boiling</label>
-                <input-duration id="bob"></input-duration>
+                <h3>Time Spent Boiling</h3>
+                <div id = "timeEntry">
+                    <input class = "timeEntry" type="number" id="recHr" min="0" value = "0">
+                    <span>hr </span>
+                    <input class = "timeEntry" type="number" id="recMin" min="0" max = "59" value = "0">
+                    <span>min </span>
+                    <input class = "timeEntry" type="number" id="recSec" min="0" max = "59" value = "0">
+                    <span>sec </span>
+                </div>
                 <button onclick = "record()">Record</button>
             </div>
         </main>

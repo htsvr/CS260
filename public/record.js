@@ -32,9 +32,11 @@ async function GlobSaveSession(session) {
   }
 
 function record() {
-    const bob = document.querySelector("#bob").value;
-    const ms = ((((+bob.substring(0, 2))*60+(+bob.substring(3, 5)))*60+(+bob.substring(6, 8)))*1000+(+bob.substring(9, 12)));
-    const newSession = {user: sessionStorage.getItem("username"), timeStarted: Date.now(), timeElapsed: ms, ended: true};
+    const recHr = document.querySelector("#recHr").value;
+    const recMin = document.querySelector("#recMin").value;
+    const recSec = document.querySelector("#recSec").value;
+    const ms = ((+recHr)*60*60+(+recMin)*60+(+recSec))*1000
+    const newSession = {user: sessionStorage.getItem("username"), timeStarted: Date.now()-ms, timeElapsed: ms, ended: true};
     GlobSaveSession(newSession);
     window.location.href = "track.html";
 }

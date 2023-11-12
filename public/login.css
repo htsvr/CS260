@@ -94,6 +94,18 @@ button:hover {
   height: 2em;
 }
 
+#timeEntry {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.timeEntry {
+  resize: horizontal;
+  width: 3em;
+  text-align: right;
+}
+
 @media screen and (min-width: 640px){
   #button-col {
     grid-column: 2/3;
