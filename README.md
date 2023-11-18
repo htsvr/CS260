@@ -56,3 +56,8 @@ This website allows you to track your boiling and see who else is boiling water 
 - **Your frontend calls third party service endpoints** - Random quote displays on the record page.
 - **Your backend provides service endpoints** - Implemented service endpoints to get and update boiling sessions.
 - **Your frontend calls your service endpoints** - Frontend calls service endponts to get updated boiling sessions and times.
+
+## Database
+- **MongoDB Atlas database created** - Done!
+- **Provides backend endpoints for manipulating application data** - Done! Updates database when you start or stop boiling
+- **Stores application data in MongoDB** - Done!
