@@ -61,3 +61,9 @@ This website allows you to track your boiling and see who else is boiling water 
 - **MongoDB Atlas database created** - Done!
 - **Provides backend endpoints for manipulating application data** - Done! Updates database when you start or stop boiling
 - **Stores application data in MongoDB** - Done!
+
+## Login
+- **Supports new user registration** - Done!
+- **Supports existing user authentication** - Done!
+- **Stores and retrieves credentials in MongoDB** - Done!
+- **Restricts application functionality based upon authentication** - Only allows you to get or submit boiling sessions if you are logged in.
