@@ -1,17 +1,16 @@
 function updateUsername() {
-    const nameEl = document.querySelector("#username");
-    const username = sessionStorage.getItem("username");
-    if (username == undefined) {
-        username = localStorage.getItem("username");
-        sessionStorage.setItem("username", username);
-    } if(username){
-        nameEl.textContent = username;
-    }
+  const nameEl = document.querySelector("#username");
+  const username = localStorage.getItem("username");
+  if(username){
+      nameEl.textContent = username;
+  }
 }
 
 function logout() {
-    localStorage.removeItem("username");
-    window.location.href = "index.html";
+  localStorage.removeItem('username');
+  fetch(`/api/auth/logout`, {
+    method: 'delete',
+  }).then(() => (window.location.href = '/'));
 }
 
 async function GlobSaveSession(session) {
@@ -36,7 +35,7 @@ function record() {
     const recMin = document.querySelector("#recMin").value;
     const recSec = document.querySelector("#recSec").value;
     const ms = ((+recHr)*60*60+(+recMin)*60+(+recSec))*1000
-    const newSession = {user: sessionStorage.getItem("username"), timeStarted: Date.now()-ms, timeElapsed: ms, ended: true};
+    const newSession = {user: localStorage.getItem("username"), timeStarted: Date.now()-ms, timeElapsed: ms, ended: true};
     GlobSaveSession(newSession);
     window.location.href = "track.html";
 }

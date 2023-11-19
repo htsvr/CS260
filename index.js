@@ -85,19 +85,19 @@ secureApiRouter.use(async (req, res, next) => {
 });
 
 // GetScores
-apiRouter.get('/sessions', async (_req, res) => {
+secureApiRouter.get('/sessions', async (_req, res) => {
   const sessions = await DB.getSessions();
   res.send(sessions);
 });
 
 // SubmitScore
-apiRouter.post('/sessions/start', async (req, res) => {
+secureApiRouter.post('/sessions/start', async (req, res) => {
   DB.addSession(req.body);
   const sessions = await DB.getSessions();
   res.send(sessions);
 });
 
-apiRouter.post('/sessions/end', async (req, res) => {
+secureApiRouter.post('/sessions/end', async (req, res) => {
     DB.endSession(req.body.username, req.body.time);
     const sessions = await DB.getSessions();
     res.send(sessions);
@@ -119,12 +119,3 @@ function setAuthCookie(res, authToken) {
 app.listen(port, () => {
   console.log(`Listening on port ${port}`);
 });
-
-// function endSession(username, endTime) {
-//     sessions.forEach((session) => {
-//         if (session.user == username && !session.ended){
-//             session.timeElapsed = endTime - session.timeStarted;
-//             session.ended = true;
-//         }
-//     });
-// }

@@ -94,6 +94,17 @@ button:hover {
   height: 2em;
 }
 
+#errorMsg {
+  color: red;
+}
+
+div.hor-flex {
+  display: flex;
+  flex-direction: row;
+  justify-content: right;
+  padding: .5em;
+}
+
 #timeEntry {
   display: flex;
   flex-direction: row;
