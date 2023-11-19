@@ -305,15 +305,19 @@ function checkIfBoiling(){
     }
 }
 
-updateUsername();
-GlobLoadSessions();
-checkIfBoiling();
-updateButton();
-update_sessions();
-loadPlots();
-setInterval(() => {
+(async () => {
+    updateUsername();
+    await GlobLoadSessions();
+    checkIfBoiling();
+    updateButton();
     update_sessions();
+    loadPlots();
+  })();
+
+
+setInterval(() => {
     GlobLoadSessions();
+    update_sessions();
     updateBoilers();
     loadPlots();
     }, 1000 );
