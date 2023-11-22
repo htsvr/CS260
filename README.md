@@ -67,3 +67,9 @@ This website allows you to track your boiling and see who else is boiling water 
 - **Supports existing user authentication** - Done!
 - **Stores and retrieves credentials in MongoDB** - Done!
 - **Restricts application functionality based upon authentication** - Only allows you to get or submit boiling sessions if you are logged in.
+
+## Websocket
+- **Backend listens for WebSocket connection** - Done!
+- **Frontend makes WebSocket connection** - Done!
+- **Data sent over WebSocket connection** - Data is sent whenever a boiling session is started, ended, or recorded.
+- **WebSocket data displayed in the application interface** - New sessions displayed in current boiliers until they are ended.
