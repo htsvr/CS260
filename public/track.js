@@ -17,6 +17,7 @@ async function GlobLoadSessions() {
   }
 
   async function GlobSaveSession(session) {
+    updateSessionsLocal(session);
     try {
       const response = await fetch('/api/sessions/start', {
         method: 'POST',
@@ -25,15 +26,16 @@ async function GlobLoadSessions() {
       });
 
       // Store what the service gave us as the high scores
-      const sessions = await response.json();
-      localStorage.setItem('sessions', JSON.stringify(sessions));
+      // const sessions = await response.json();
+      // localStorage.setItem('sessions', JSON.stringify(sessions));
     } catch {
       // If there was an error then just track scores locally
-      this.updateSessionsLocal(session);
+      // this.updateSessionsLocal(session);
     }
   }
 
   async function GlobEndSession() {
+    endSessionsLocal();
     try {
       const response = await fetch('/api/sessions/end', {
         method: 'POST',
@@ -42,11 +44,11 @@ async function GlobLoadSessions() {
       });
 
       // Store what the service gave us as the high scores
-      const sessions = await response.json();
-      localStorage.setItem('sessions', JSON.stringify(sessions));
+      // const sessions = await response.json();
+      // localStorage.setItem('sessions', JSON.stringify(sessions));
     } catch {
       // If there was an error then just track scores locally
-      this.endSessionsLocal();
+      // endSessionsLocal();
     }
   }
 
@@ -104,6 +106,7 @@ function startSession(){
     GlobSaveSession(newSession);
     localStorage.setItem("isBoiling", true);
     updateButton();
+    broadcastEvent(localStorage.getItem("username"), "StartBoiling", Date.now());
     // const newItem = document.createElement("li");
     // newItem.appendChild(document.createTextNode(localStorage.getItem("username") + " - 00:00:00"));
     // document.querySelector("#currentBoilers").appendChild(newItem);
@@ -113,6 +116,7 @@ function endSession(){
     GlobEndSession();
     localStorage.setItem("isBoiling", false);
     updateButton();
+    broadcastEvent(localStorage.getItem("username"), "EndBoiling", Date.now());
     // const currentBoilers = document.querySelector("#currentBoilers");
     // for (const child of currentBoilers.children) {
     //     if (child.textContent == localStorage.getItem("username")){
@@ -294,7 +298,11 @@ function deleteChildren(elem) {
 }
 
 function checkIfBoiling(){
-    const sessions = JSON.parse(localStorage.getItem("sessions"));
+    let sessions = [];
+    const sessionsText = localStorage.getItem('sessions');
+    if (sessionsText) {
+    sessions = JSON.parse(sessionsText);
+    }
     localStorage.setItem("isBoiling", "false");
     if (sessions !== undefined) {
         for (session of sessions) {
@@ -305,7 +313,48 @@ function checkIfBoiling(){
     }
 }
 
+function configureWebSocket() {
+    const protocol = window.location.protocol === 'http:' ? 'ws' : 'wss';
+    socket = new WebSocket(`${protocol}://${window.location.host}/ws`);
+    socket.onopen = (event) => {
+        
+    };
+    socket.onclose = (event) => {
+        
+    };
+    socket.onmessage = async (event) => {
+      const msg = JSON.parse(await event.data.text());
+      if (msg.type === "StartBoiling") {
+        const newSession = {user: msg.from, timeStarted: msg.value, timeElapsed: 0, ended: false};
+        updateSessionsLocal(newSession);
+      } else if (msg.type === "EndBoiling") {
+        let sessions = [];
+        const sessionsText = localStorage.getItem('sessions');
+        if (sessionsText) {
+        sessions = JSON.parse(sessionsText);
+        }
+        sessions.forEach((session) => {
+            if (session.user == msg.from && !session.ended){
+                session.timeElapsed = msg.value - session.timeStarted;
+                session.ended = true;
+            }
+        });
+        localStorage.setItem("sessions", JSON.stringify(sessions));
+      }
+    };
+}
+
+function broadcastEvent(from, type, value) {
+    const event = {
+      from: from,
+      type: type,
+      value: value,
+    };
+    socket.send(JSON.stringify(event));
+}
+let socket;
 (async () => {
+    configureWebSocket();
     updateUsername();
     await GlobLoadSessions();
     checkIfBoiling();
@@ -314,9 +363,8 @@ function checkIfBoiling(){
     loadPlots();
   })();
 
-
 setInterval(() => {
-    GlobLoadSessions();
+    //GlobLoadSessions();
     update_sessions();
     updateBoilers();
     loadPlots();
