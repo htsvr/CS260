@@ -340,6 +340,9 @@ function configureWebSocket() {
             }
         });
         localStorage.setItem("sessions", JSON.stringify(sessions));
+      } else if (msg.type === "AddBoiling") {
+        const newSession = {user: msg.from, timeStarted: msg.value.timeStarted, timeElapsed: msg.value.timeElapsed, ended: true};
+        updateSessionsLocal(newSession);
       }
     };
 }
@@ -373,4 +376,3 @@ setInterval(() => {
     //     GlobLoadSessions();
     //     //update_sessions();
     //     }, 10000 );
-
