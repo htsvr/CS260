@@ -31,7 +31,7 @@ export default function App() {
         <div className="body">
             <header>
                 <h1>Start Boiling</h1>
-                <img className = 'svg' src = "assets/images/profile.svg" alt="profile image" />
+                <img className = 'svg' src = "/images/profile.svg" alt="profile image" />
                 <h2 id = "username">{userName}</h2>
                 <button onClick = {() => logout()}>Log out</button>
             </header>
