@@ -1,0 +1,49 @@
+div.flexy {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: top;
+    gap: 1em;
+  }
+  
+  input {
+    border: 3px solid black;
+    padding: .5em;
+    border-radius: 4px;
+  }
+  
+  button {
+    color: #000000;
+    background-color: #FFFFFF;
+    border-color: #6fefc4;
+    border-width: 3px;
+    border-radius: 1em;
+    padding: 1em;
+    transition-duration: 0.4s;
+  }
+  
+  button:hover {
+    background-color: #6fefc4;
+  }
+  
+  #errorMsg {
+    color: red;
+  }
+  
+  div.hor-flex {
+    display: flex;
+    flex-direction: row;
+    justify-content: right;
+    padding: .5em;
+    gap: .5em;
+    align-items: center
+  }
+
+  div.ver-flex {
+    display: flex;
+    flex-direction: column;
+    padding: .5em;
+    align-items: center;
+    justify-content: top;
+    gap: .5em;
+  }
