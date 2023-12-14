@@ -1,8 +1,35 @@
 import React from 'react';
 import './track.css'
+import { useNavigate } from 'react-router-dom';
 import { GameNotifier } from './gameNotifier';
+import {
+    Chart as ChartJS,
+    CategoryScale,
+    LinearScale,
+    BarElement,
+    Title,
+    PointElement,
+    LineElement,
+    Tooltip,
+    Legend,
+    ArcElement
+} from 'chart.js';
+import { Bar, Scatter, Pie } from 'react-chartjs-2';
+
+ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    BarElement,
+    Title,
+    Tooltip,
+    Legend,
+    PointElement,
+    LineElement,
+    ArcElement
+);
 
 export function Track({ username }) {
+    const navigate = useNavigate();
     const [sessions, setSessions] = React.useState(JSON.parse(localStorage.getItem('sessions')) || []);
     const [time, setTime] = React.useState(Date.now());
     const [isBoiling, setIsBoiling] = React.useState(false);
@@ -42,8 +69,12 @@ export function Track({ username }) {
         }
     }
 
-    const currentBoilersList = Object.keys(currentBoilers).map((key) => { return (<li key={key}>{key} - {getFormatedTime(currentBoilers[key])}</li>); });
-    const topBoilersList = Object.keys(topBoilers).map((key) => { return (<li key={key}>{key} - {getFormatedTime(topBoilers[key])}</li>); });
+    const currentBoilersList = Object.keys(currentBoilers).map((key) => ({ user: key, value: currentBoilers[key] })).sort((a, b) => (a.value > b.value) ? -1 : 1).map((obj) => {
+        return (<li key={obj.user}>{obj.user} - {getFormatedTime(obj.value)}</li>);
+    });
+    const topBoilersList = Object.keys(topBoilers).map((key) => ({ user: key, value: topBoilers[key] })).sort((a, b) => (a.value > b.value) ? -1 : 1).map((obj) => {
+        return (<li key={obj.user}>{obj.user} - {getFormatedTime(obj.value)}</li>);
+    });
 
     async function GlobLoadSessions() {
         let sessions = [];
@@ -111,7 +142,7 @@ export function Track({ username }) {
         const d = new Date(Date.UTC(0, 0, 0, 0, 0, 0, ms)),
             // Pull out parts of interest
             parts = [
-                d.getUTCHours(),
+                Math.floor(ms / 1000 / 60 / 60),
                 d.getUTCMinutes(),
                 d.getUTCSeconds()
             ],
@@ -195,15 +226,13 @@ export function Track({ username }) {
     }
 
     return (
-        <main>
+        <main className='gridlayout'>
             <div className='main-col' id="button-col">
                 <div className='grid-piece'>
                     <button id="startboiling" style={isBoiling ? { background: 'gray' } : { background: 'white' }} onClick={() => boilingButtonPressed()}>{isBoiling ? 'Stop Boiling' : 'Start Boiling'}</button>
                     <br />
                     <br />
-                    <a href="record.html">
-                        <button>Record Previous Boil</button>
-                    </a>
+                    <button onClick={() => navigate('/record')}>Record Previous Boil</button>
                 </div>
                 <div className='grid-piece'>
                     <div className="personalStats">
@@ -236,12 +265,145 @@ export function Track({ username }) {
             </div>
             <div className='main-col'>
                 <div className='grid-piece'>
-                    <canvas id="barchart"></canvas>
+                    <MyBar sessions={sessions} />
                 </div>
                 <div className='grid-piece'>
-                    <canvas id="scatterplot"></canvas>
+                    <MyPlot sessions={sessions} />
+                </div>
+                <div className='grid-piece'>
+                    <MyPie topBoilers={topBoilers} />
                 </div>
             </div>
         </main>
     );
+}
+
+export function MyBar({ sessions }) {
+    const options = {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'none',
+            },
+            title: {
+                display: true,
+                text: 'Minutes Boiled by Day of the Week',
+            },
+        },
+    };
+
+    const labels = ['Sun', 'Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat'];
+
+    let myData = [0, 0, 0, 0, 0, 0, 0]
+    let day = 0;
+    sessions.forEach((session) => {
+        day = (new Date(session.timeStarted)).getDay();
+        myData[day] += session.timeElapsed;
+    });
+
+    const data = {
+        labels,
+        datasets: [
+            {
+                label: 'Dataset 1',
+                data: labels.map((label, index) => myData[index] / (60 * 1000)),
+                backgroundColor: 'rgba(255, 99, 132, 0.5)',
+            }
+        ],
+    };
+
+    return (<Bar options={options} data={data} />);
+}
+
+export function MyPlot({ sessions }) {
+    const options = {
+        scales: {
+            y: {
+                title: {
+                    text: "Minutes Boiled",
+                    display: true,
+                },
+                beginAtZero: true,
+            },
+            x: {
+                title:
+                {
+                    text: "Day",
+                    display: false,
+                },
+                ticks: { callback: (value) => { return new Date(value).toLocaleDateString({ month: "short", year: "numeric" }); } }
+            }
+        },
+        plugins: {
+            legend: {
+                position: 'none',
+            },
+            title: {
+                display: true,
+                text: 'Individual Boiling Sessions',
+            },
+        },
+    };
+
+    const data = {
+        datasets: [
+            {
+                label: '',
+                data: sessions.map((session) => (
+                    {
+                        x: session.timeStarted,
+                        y: session.timeElapsed / 1000
+                    }
+                )),
+                backgroundColor: 'rgba(255, 99, 132, 1)',
+            },
+        ],
+    };
+    return <Scatter options={options} data={data} />;
+}
+
+const maxNum = 10;
+let backgroundColors = [];
+let borderColors = [];
+let a;
+let b;
+let c;
+for (let i = 0; i < maxNum; i++) {
+    a = Math.floor(Math.random() * 255);
+    b = Math.floor(Math.random() * 255);
+    c = Math.floor(Math.random() * 255);
+    backgroundColors.push('rgba(' + a + ', ' + b + ', ' + c + ', 0.2)');
+    borderColors.push('rgba(' + a + ', ' + b + ', ' + c + ', 1)');
+}
+
+export function MyPie({ topBoilers }) {
+    let labels = [];
+    let myData = Array(maxNum);
+
+    myData[maxNum - 1] = 0;
+    const topBoilersList = Object.keys(topBoilers).map((key) => ({ user: key, value: topBoilers[key] })).sort((a, b) => (a.value > b.value) ? -1 : 1).map((obj, index) => {
+        if (index < maxNum - 1) {
+            labels[index] = obj.user;
+            myData[index] = obj.value / (1000 * 60);
+        }
+        else {
+            myData[maxNum - 1] += obj.value / (1000 * 60);
+        }
+    });
+
+    labels.push("Other");
+    const data = {
+        labels: labels,
+        datasets: [
+            {
+                label: '# of Minutes Boiled',
+                data: myData,
+                backgroundColor: backgroundColors,
+                borderColor: borderColors,
+                borderWidth: 1,
+            },
+        ],
+    };
+
+    return (<Pie data={data} />);
 }

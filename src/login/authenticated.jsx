@@ -20,14 +20,16 @@ export function Authenticated(props) {
   }
 
   return (
-    <div id="playControls">
+    <div className="flexy">
       <div id='playerName'>{props.userName}</div>
-      <button type='button' onClick={() => navigate('/track')}>
-        Start Tracking
-      </button>
-      <button type='button' onClick={() => logout()}>
-        Logout
-      </button>
+      <div className='hor-flex'>
+        <button type='button' onClick={() => navigate('/track')}>
+          Start Tracking
+        </button>
+        <button type='button' onClick={() => logout()}>
+          Logout
+        </button>
+      </div>
     </div>
   );
 }

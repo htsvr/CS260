@@ -45,7 +45,7 @@ export default function App() {
                 }}
               />} exact />
                 <Route path='/track' element={<Track username={userName}/>} />
-                <Route path='/record' element={<Record />} />
+                <Route path='/record' element={<Record username={userName}/>} />
                 <Route path='*' element={<NotFound />} />
             </Routes>
             <footer>

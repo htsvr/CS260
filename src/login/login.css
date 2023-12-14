@@ -47,3 +47,20 @@ div.flexy {
     justify-content: top;
     gap: .5em;
   }
+
+  #timeEntry {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1em;
+  }
+  
+  .timeEntry {
+    resize: horizontal;
+    width: 3em;
+    text-align: right;
+  }
+  
+  .quote {
+    gap: 0em;
+  }

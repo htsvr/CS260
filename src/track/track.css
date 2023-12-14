@@ -49,6 +49,18 @@ button:hover {
   object-fit: contain;
 }
 
+main.gridlayout {
+  flex: 1;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-gap: 1em;
+  align-items: top;
+  justify-content: center;
+  grid-auto-flow: row;
+}
+
 @media screen and (min-width: 680px){
   #button-col {
     grid-column: 2/3;
