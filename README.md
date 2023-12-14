@@ -73,3 +73,9 @@ This website allows you to track your boiling and see who else is boiling water 
 - **Frontend makes WebSocket connection** - Done!
 - **Data sent over WebSocket connection** - Data is sent whenever a boiling session is started, ended, or recorded.
 - **WebSocket data displayed in the application interface** - New sessions displayed in current boiliers until they are ended.
+
+## React
+- **Bundled using vite** - Done!
+- **Multiple functional react components** - Done!
+- **React router** - Done!
+- **React hooks** - Done!
